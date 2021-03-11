@@ -4,6 +4,8 @@ import threading
 import datetime
 import time
 import logging
+import tokens
+import signal
 
 latest_update = datetime.datetime.now()
 updater = None
@@ -26,24 +28,29 @@ def alive_checker():
         now = datetime.datetime.now()
         if (now - latest_update).seconds > 60:
             try:
-                updater.bot.send_message(chat_id="ID", text="چوآوآ")
+                updater.bot.send_message(chat_id=tokens.chat_id, text="Service is down")
             except Exception as error:
                 print(error)
         time.sleep(5)
 
 
 def main():
-    TOKEN = "TOKEN"
+    TOKEN = tokens.my_token
     global updater
     updater = Updater(token=TOKEN, use_context=True)
 
     updater.start_polling()
     updater.idle()
 
+def handler(signum, frame):
+    print('idle point')
+    updater.idle()
+
 
 if __name__ == "__main__":
     # threading.Thread(target=main).start()
     # app.run()
+    signal.signal(signal.SIGINT, handler)
     threading.Thread(target=app.run, kwargs={"host": "0.0.0.0", "port": 8333, "debug": True, "use_reloader": False}).start()
     threading.Thread(target=alive_checker).start()
     main()
