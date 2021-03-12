@@ -31,7 +31,7 @@ def alive_checker():
                 updater.bot.send_message(chat_id=tokens.chat_id, text="Service is down")
             except Exception as error:
                 print(error)
-        time.sleep(5)
+        time.sleep(2*60)
 
 
 def main():
