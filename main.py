@@ -26,11 +26,16 @@ def salman():
 def alive_checker():
     while(True):
         now = datetime.datetime.now()
-        if (now - latest_update).seconds > (60*5):
+        diff = now - latest_update
+        diff_secs = diff.seconds
+        if diff_secs > (60*5):
             try:
                 updater.bot.send_message(chat_id=tokens.chat_id, text="Service is down")
             except Exception as error:
                 print(error)
+        del diff_secs
+        del diff
+        del now
         time.sleep(2*60)
 
 
